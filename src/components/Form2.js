@@ -1,13 +1,20 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup' 
+import TextError from './TextError'
 // Object Schema Validation
 
 // correspond to name in input
 const initialValues = {
   name: '',
   email: '',
-  channel: ''
+  channel: '',
+  comments: '',
+  address: '',
+  social: {
+    facebook: '',
+    twitter: ''
+  }
 }
 
 const onSubmit = values => {
@@ -41,7 +48,7 @@ const Form2 = () => {
             id='name' 
             name='name' 
           />
-          <ErrorMessage name='name' />
+          <ErrorMessage name='name' component={TextError}/>
         </div>
         <div className='relative flex flex-col mt-4'>
           <label className='mr-[30px]' htmlFor='email'> E-mail </label>
@@ -51,9 +58,11 @@ const Form2 = () => {
             id='email' 
             name='email' 
           />
-          <ErrorMessage name='email' />
+          <ErrorMessage name='email' >
+              {errorMsg => <div className='text-red-500 font-semibold'>{errorMsg}</div>}
+          </ErrorMessage>
         </div>
-        <div className='relative flex flex-col mt-4 mb-8'>
+        <div className='relative flex flex-col mt-4'>
           <label className='mr-4' htmlFor='channel'> Channel </label>
           <Field 
             className='rounded-sm pl-2 py-1' 
@@ -62,6 +71,58 @@ const Form2 = () => {
             name='channel' 
           />
           <ErrorMessage name='channel' />
+        </div>
+        <div className='relative flex flex-col mt-4'>
+          <label className='mr-4' htmlFor='comments'> Comments </label>
+          <Field 
+            as='textarea'
+            className='rounded-sm pl-3 py-1' 
+            id='comments' 
+            name='comments' 
+          />
+          <ErrorMessage name='comments' />
+        </div>
+        <div className='relative flex flex-col mt-4'>
+          <label className='mr-4' htmlFor='address'> Address </label>
+          <Field 
+            className='rounded-sm pl-3 py-1' 
+            id='address' 
+            name='address' 
+          >
+          {
+            (props) => {
+              const {field, form, meta} = props
+              console.log('Render Props', props)
+              return( 
+                <div>
+                  <input type='text' id='address' {...field} />
+                  {meta.touched && meta.error ? <div>{meta.error}</div> : null}
+                </div>
+              )
+            }
+          }
+          </Field>
+          <ErrorMessage name='address' />
+        </div>
+        <div className='relative flex flex-col mt-4'>
+          <label className='mr-4' htmlFor='faecbook'> Facebook profile </label>
+          <Field 
+            type='text'
+            className='rounded-sm pl-1 py-1' 
+            id='facebook' 
+            name='social.facebook' 
+          />
+          <ErrorMessage name='facebook' />
+        </div>
+        <div className='relative flex flex-col mt-4 mb-8'>
+          <label className='mr-4' htmlFor='twitter'> Twitter profile </label>
+          <Field 
+            type='text'
+            className='rounded-sm pl-1 py-1' 
+            id='twitter' 
+            name='social.twitter' 
+          />
+          <ErrorMessage name='facebook' />
         </div>
         <div className=''>
           <button type='submit' className='mt-2 bg-black text-white font-bold p-2 rounded-lg'>Submit</button>
